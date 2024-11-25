@@ -32,19 +32,6 @@
               "name": "dependency-needstransformation"
             }
           ]
-        },
-        {
-          "group": "com.example",
-          "module": "dependency",
-          "version": {
-            "requires": "1.0.0"
-          },
-          "requestedCapabilities": [
-            {
-              "group": "com.example",
-              "name": "dependency-feature"
-            }
-          ]
         }
       ],
       "files": [
@@ -56,45 +43,6 @@
           "sha256": "390f389585b9d5b4ceecfb13c53a06211fd10ed8e63a06ab8b4c3eb2eaed1578",
           "sha1": "acace8baa8028f25a6e8c6f8ee78cbca1b679eca",
           "md5": "351d510bf396538d5a32ca5130033a46"
-        }
-      ]
-    },
-    {
-      "name": "featureRuntimeElements",
-      "attributes": {
-        "org.gradle.usage": "java-runtime"
-      },
-      "dependencies": [
-        {
-          "group": "com.example",
-          "module": "dependency",
-          "version": {
-            "requires": "1.0.0"
-          },
-          "requestedCapabilities": [
-            {
-              "group": "com.example",
-              "name": "dependency-needstransformation"
-            }
-          ]
-        }
-      ],
-      "files": [
-        {
-          "name": "dependency-1.0.0-feature.jar",
-          "url": "dependency-1.0.0-feature.jar",
-          "size": 261,
-          "sha512": "3d5dbca7f2e540403e533a1dfd3710f9795013e2591ecae11f12f059ccd24da61e28ea8abb247f2116a474f4d4db2d4d571246d242ef4dcab3a4ecbb0ac122bd",
-          "sha256": "390f389585b9d5b4ceecfb13c53a06211fd10ed8e63a06ab8b4c3eb2eaed1578",
-          "sha1": "acace8baa8028f25a6e8c6f8ee78cbca1b679eca",
-          "md5": "351d510bf396538d5a32ca5130033a46"
-        }
-      ],
-      "capabilities": [
-        {
-          "group": "com.example",
-          "name": "dependency-feature",
-          "version": "1.0.0"
         }
       ]
     },
