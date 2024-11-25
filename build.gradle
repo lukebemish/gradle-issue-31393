@@ -1,0 +1,71 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+}
+
+version = '1.0.0'
+
+repositories {
+    maven {
+        url = project.file('repo').toURI()
+        metadataSources {
+            gradleMetadata()
+        }
+    }
+}
+
+import org.gradle.api.artifacts.transform.TransformParameters
+
+abstract class Transform implements TransformAction<TransformParameters.None> {
+    @InputArtifactDependencies
+    abstract FileCollection getInputArtifactDependencies();
+
+    @InputArtifact
+    abstract Provider<FileSystemLocation> getInputArtifact();
+
+    @Override
+    void transform(TransformOutputs outputs) {
+        if (!inputArtifactDependencies.files.empty) {
+            throw new RuntimeException("Unexpected dependencies ${inputArtifactDependencies.collect()} of ${inputArtifact.get().asFile}")
+        }
+        outputs.file(inputArtifact)
+    }
+}
+
+abstract class Resolve extends DefaultTask {
+    @InputFiles
+    abstract ConfigurableFileCollection getInput()
+
+    @TaskAction
+    private void resolve() {
+        getInput().getFiles()
+    }
+}
+
+def transformedAttribute = Attribute.of("transformed", Boolean)
+
+configurations {
+    dependencyScope("scope")
+
+    resolvable("resolvable") {
+        extendsFrom(scope)
+    }
+}
+
+dependencies {
+    registerTransform(Transform) {
+        it.from.attribute(ArtifactTypeDefinition.ARTIFACT_TYPE_ATTRIBUTE, "jar").attribute(transformedAttribute, false)
+        it.to.attribute(ArtifactTypeDefinition.ARTIFACT_TYPE_ATTRIBUTE, "jar").attribute(transformedAttribute, true)
+    }
+
+    scope("com.example:dependency:1.0.0")
+}
+
+tasks.register('resolve', Resolve) {
+    input.from(configurations.resolvable.incoming.artifactView {
+        attributes {
+            attribute(ArtifactTypeDefinition.ARTIFACT_TYPE_ATTRIBUTE, "jar")
+            attribute(transformedAttribute, true)
+        }
+    }.files)
+}
